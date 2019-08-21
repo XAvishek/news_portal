@@ -1,0 +1,30 @@
+{% extends "partials/base.html" %}
+{% load crispy_forms_tags %}
+
+  {% block header %}
+  {% include "partials/header.html" %}
+  {% endblock header %}
+  
+  {% block navarea %}
+  {% include "partials/navarea.html" %}
+  {% endblock navarea %}
+
+  {% block content %}
+  <form method="post">
+  {{ form }}
+  {% csrf_token %}
+  <button type="submit" class="btn btn-info">Submit</button>
+  </form>
+  {% endblock content %}
+
+  {% block news_section %}
+  {% include "partials/news_section.html" %}
+  {% endblock news_section %} 
+
+  {% block footer %}
+  {% include "partials/footer.html" %}
+  {% endblock footer %}
+
+  {% block script %}
+  {% include "partials/script.html" %}
+  {% endblock script %}

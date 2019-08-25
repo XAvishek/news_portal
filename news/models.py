@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+
 
 # Create your models here.
 class News(models.Model):
@@ -12,3 +14,10 @@ class News(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     cover_image= models.ImageField(upload_to="uploads")
+
+    def get_absolute_url(self):
+        return reverse("news_detail", kwargs={"category": self.get_category_display(), "pk": self.pk, "slug":self.slug})
+    
+    
+
+

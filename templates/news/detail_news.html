@@ -27,31 +27,40 @@
               <li><a href="{% url 'category_news' category=news.get_category_display %}">{{ news.get_category_display }}</a></li>
             </ol>
             <h1>{{ news.title }}</h1>
-            <div class="post_commentbox"> <a href="#"><i class="fa fa-user"></i>{{ news.reporter }}</a> <span><i class="fa fa-calendar"></i>{{ news.created_at }}</span> <a href="#"><i class="fa fa-tags"></i>{{ news.get_category_display }}</a> </div>
+            <div class="post_commentbox"> <a href="#"><i class="fa fa-user"></i>{{ news.reporter }}</a> <span><i class="fa fa-calendar"></i>{{ news.created_at }}</span> <a href="#"><i class="fa fa-tags"></i>{{ news.get_category_display }}</a> <span><i >Count:</i>{{ news.count }}</span> </div>
             <div class="single_page_content"> <img class="img-center" src="{{ news.cover_image.url }}" alt="">
               <p>{{ news.story }}</p>
-              <button class="btn btn-blue">Blue Button</button>
+              {% if request.user.is_authenticated and request.user == news.reporter %}
+              <a href="{{ news.get_absolute_url }}update/"> <button class="btn btn-blue">Update</button></a>
+              <!-- <a href="{{ news.get_absolute_url }}delete/"> <button class="btn btn-danger">Delete</button></a> -->
+              {% include "partials/delete_modal.html" %}
+              {% endif %}
             </div>
             
             <div class="related_post">
-              <h2>Related Post <i class="fa fa-thumbs-o-up"></i></h2>
-              <ul class="spost_nav wow fadeInDown animated">
-                <li>
-                  <div class="media"> <a class="media-left" href="single_page.html"> <img src="../images/post_img1.jpg" alt=""> </a>
-                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
+              <h2>All Comments <i class="fa fa-thumbs-o-up"></i></h2>
+              
+              <div class="list-group">
+              {% for comment in comments %}
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ comment.comment_by }}</h5>
+                    <small class="text-muted">{{ comment.create_at }}</small>
                   </div>
-                </li>
-                <li>
-                  <div class="media"> <a class="media-left" href="single_page.html"> <img src="../images/post_img2.jpg" alt=""> </a>
-                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="media"> <a class="media-left" href="single_page.html"> <img src="../images/post_img1.jpg" alt=""> </a>
-                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
-                  </div>
-                </li>
-              </ul>
+                  <p class="mb-1">{{ comment.feedback }}</p>
+                </a>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <form method="post" action="{{ news.get_absolute_url }}comment/">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Leave Comment</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="feedback"></textarea>
+                </div>
+                <button type="submit" class="btn btn-info">Comment</button>
+              </form>
             </div>
           </div>
         </div>

@@ -6,5 +6,5 @@ urlpatterns = [
     path('<str:category>/<int:pk>/<str:slug>/', views.NewsDetailView.as_view(), name='news_detail'),
     path('<str:category>/<int:pk>/<str:slug>/update/', views.NewsUpdateView.as_view(), name='update_news'),
     path('<str:category>/<int:pk>/<str:slug>/delete/', views.NewsDeleteView.as_view(), name='delete_news'),
-    path('<str:category>/<int:pk>/<str:slug>/comment/', views.create_comment, name='create_news'),
+    path('<str:category>/<int:pk>/<str:slug>/comment/', views.create_comment, name='create_comment'),
 ]

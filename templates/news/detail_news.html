@@ -40,7 +40,7 @@
             <div class="related_post">
               <h2>All Comments <i class="fa fa-thumbs-o-up"></i></h2>
               
-              <div class="list-group">
+              <div class="list-group" id="comment-list">
               {% for comment in comments %}
                 <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                   <div class="d-flex w-100 justify-content-between">
@@ -53,11 +53,10 @@
               </div>
             </div>
             <div>
-              <form method="post" action="{{ news.get_absolute_url }}comment/">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+              <form id="comment-form">
                 <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Leave Comment</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="feedback"></textarea>
+                  <label for="feedback">Leave Comment</label>
+                  <textarea class="form-control" rows="3" name="feedback" id="feedback"></textarea>
                 </div>
                 <button type="submit" class="btn btn-info">Comment</button>
               </form>
@@ -185,5 +184,28 @@
 {% endblock footer %}
 
 {% block script %}
+
 {% include "partials/script.html" %}
+
+<script>
+  $("#comment-form").submit(function (error){
+    error.preventDefault();
+    $.ajax({
+      url: "{{ news.get_absolute_url }}comment/",
+      method: "post",
+      data: {
+        feedback: $("#feedback").val(),
+        csrfmiddlewaretoken : "{{ csrf_token }}"
+      },
+      success: function(response){
+        console.log(response)
+        $("#comment-list").append(response)
+      },
+      error: function(err){
+        console.log(err)
+      }
+    });
+  });
+</script>
+
 {% endblock script %}
